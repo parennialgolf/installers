@@ -71,6 +71,77 @@ tps.bat
 - **Installation Path**: `C:\Program Files\TrackMan Performance Studio\`
 - **Log File**: `%USERPROFILE%\Downloads\install_tps.log`
 
+### 3. `remote-install.bat` - Remote Batch Installer
+
+A Windows batch script that downloads and executes installer scripts directly from the GitHub repository.
+
+**Features:**
+- 🌐 **Remote Execution**: Downloads and runs scripts directly from GitHub
+- 🔄 **Multi-Script Support**: Can execute either Bay Management or TPS installers
+- 📝 **Comprehensive Logging**: Detailed logging with timestamps
+- 🧹 **Automatic Cleanup**: Removes temporary files after execution
+- 🛡️ **Error Handling**: Robust error checking and validation
+
+## 🌐 Remote Execution
+
+For one-command installation from any Windows machine with internet access, use curl to download and execute the scripts directly:
+
+```batch
+# Download and run the remote installer
+curl -L -o remote-install.bat https://raw.githubusercontent.com/parennialgolf/installers/main/remote-install.bat
+
+# Install Bay Management
+remote-install.bat bay-management YOUR_GITHUB_TOKEN
+
+# Install Bay Management with custom arguments
+remote-install.bat bay-management YOUR_GITHUB_TOKEN --silent
+remote-install.bat bay-management YOUR_GITHUB_TOKEN -AssetType portable
+
+# Install TPS (no token needed)
+remote-install.bat tps
+```
+
+### Method 1: Download and Execute Remote Installer
+
+```batch
+# Download the remote installer
+curl -L -o remote-install.bat https://raw.githubusercontent.com/parennialgolf/installers/main/remote-install.bat
+
+# Install Bay Management
+remote-install.bat bay-management YOUR_GITHUB_TOKEN
+
+# Install TPS (no token needed)
+remote-install.bat tps
+```
+
+### Method 2: Direct Script Execution
+
+**Bay Management:**
+```batch
+# Download and run directly
+curl -L -o bay-management.ps1 https://raw.githubusercontent.com/parennialgolf/installers/main/bay-management.ps1
+powershell.exe -ExecutionPolicy Bypass -File bay-management.ps1 -Token "YOUR_GITHUB_TOKEN"
+```
+
+**TPS:**
+```batch
+# Download and run directly
+curl -L -o tps.bat https://raw.githubusercontent.com/parennialgolf/installers/main/tps.bat
+tps.bat
+```
+
+### Method 3: One-Liner Commands
+
+**Bay Management:**
+```batch
+curl -L -o temp-bay.ps1 https://raw.githubusercontent.com/parennialgolf/installers/main/bay-management.ps1 && powershell.exe -ExecutionPolicy Bypass -File temp-bay.ps1 -Token "YOUR_GITHUB_TOKEN" && del temp-bay.ps1
+```
+
+**TPS:**
+```batch
+curl -L -o temp-tps.bat https://raw.githubusercontent.com/parennialgolf/installers/main/tps.bat && temp-tps.bat && del temp-tps.bat
+```
+
 ## 🚀 Quick Start
 
 ### Prerequisites
