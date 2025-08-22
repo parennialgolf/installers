@@ -84,7 +84,25 @@ A Windows batch script that downloads and executes installer scripts directly fr
 
 ## 🌐 Remote Execution
 
-For one-command installation from any Windows machine with internet access, use curl to download and execute the scripts directly:
+For one-command installation from any Windows machine with internet access, execute the scripts directly without downloading files:
+
+## 🔥 **Recommended: Zero-Download Methods**
+
+**Bay Management (Best):**
+```powershell
+$script = (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/parennialgolf/installers/main/bay-management.ps1' -UseBasicParsing).Content; & ([ScriptBlock]::Create($script)) -Token 'YOUR_GITHUB_TOKEN'
+```
+
+**TPS (Best):**
+```batch
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/tps.bat | cmd
+```
+
+---
+
+## 📥 **Alternative Methods**
+
+If you prefer downloading first or need more control:
 
 ```batch
 # Download and run the remote installer
@@ -130,16 +148,34 @@ curl -L -o tps.bat https://raw.githubusercontent.com/parennialgolf/installers/ma
 tps.bat
 ```
 
-### Method 3: One-Liner Commands
+### Method 3: Direct Execution (No File Downloads)
 
 **Bay Management:**
 ```batch
-curl -L -o temp-bay.ps1 https://raw.githubusercontent.com/parennialgolf/installers/main/bay-management.ps1 && powershell.exe -ExecutionPolicy Bypass -File temp-bay.ps1 -Token "YOUR_GITHUB_TOKEN" && del temp-bay.ps1
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/bay-management.ps1 | powershell.exe -ExecutionPolicy Bypass -Command "& ([ScriptBlock]::Create((Get-Content -Path STDIN -Raw))) -Token 'YOUR_GITHUB_TOKEN'"
 ```
 
 **TPS:**
 ```batch
-curl -L -o temp-tps.bat https://raw.githubusercontent.com/parennialgolf/installers/main/tps.bat && temp-tps.bat && del temp-tps.bat
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/tps.bat | cmd
+```
+
+### Method 4: PowerShell Direct Execution
+
+**Bay Management:**
+```powershell
+$script = (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/parennialgolf/installers/main/bay-management.ps1' -UseBasicParsing).Content
+$scriptBlock = [ScriptBlock]::Create($script)
+& $scriptBlock -Token 'YOUR_GITHUB_TOKEN'
+```
+
+**TPS (via PowerShell):**
+```powershell
+$script = (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/parennialgolf/installers/main/tps.bat' -UseBasicParsing).Content
+$scriptFile = [System.IO.Path]::GetTempFileName() + '.bat'
+Set-Content -Path $scriptFile -Value $script
+& $scriptFile
+Remove-Item $scriptFile
 ```
 
 ## 🚀 Quick Start
