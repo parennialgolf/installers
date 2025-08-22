@@ -4,29 +4,39 @@ setlocal EnableDelayedExpansion
 :: Universal PARennial Golf Installer
 :: Usage: install.bat [bay-management|tps] [github_token]
 
+:: Handle command line args or environment variables for remote execution
 if "%~1"=="" (
-    echo.
-    echo === PARennial Golf Universal Installer ===
-    echo.
-    echo Usage: install.bat [application] [token]
-    echo.
-    echo Applications:
-    echo   bay-management  - Install Bay Management ^(requires GitHub token^)
-    echo   tps            - Install TrackMan Performance Studio ^(no token needed^)
-    echo.
-    echo Examples:
-    echo   install.bat bay-management ghp_xxxxxxxxxxxx
-    echo   install.bat tps
-    echo.
-    echo Remote usage:
-    echo   curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat ^| cmd /c - bay-management YOUR_TOKEN
-    echo   curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat ^| cmd /c - tps
-    echo.
-    exit /b 1
+    if "%PG_APP%"=="" (
+        echo.
+        echo === PARennial Golf Universal Installer ===
+        echo.
+        echo Usage: install.bat [application] [token]
+        echo.
+        echo Applications:
+        echo   bay-management  - Install Bay Management ^(requires GitHub token^)
+        echo   tps            - Install TrackMan Performance Studio ^(no token needed^)
+        echo.
+        echo Examples:
+        echo   install.bat bay-management ghp_xxxxxxxxxxxx
+        echo   install.bat tps
+        echo.
+        echo Remote usage:
+        echo   curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat ^> temp-install.bat ^&^& temp-install.bat bay-management YOUR_TOKEN ^&^& del temp-install.bat
+        echo   curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat ^> temp-install.bat ^&^& temp-install.bat tps ^&^& del temp-install.bat
+        echo.
+        exit /b 1
+    ) else (
+        set "APP_TYPE=%PG_APP%"
+        set "GITHUB_TOKEN=%PG_TOKEN%"
+        goto :start_install
+    )
+) else (
+    set "APP_TYPE=%~1"
+    set "GITHUB_TOKEN=%~2"
+    goto :start_install
 )
 
-set "APP_TYPE=%~1"
-set "GITHUB_TOKEN=%~2"
+:start_install
 set "REPO_URL=https://raw.githubusercontent.com/parennialgolf/installers/main"
 set "TEMP_DIR=%TEMP%\pg-installer"
 set "LOG_FILE=%TEMP_DIR%\install.log"

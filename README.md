@@ -103,15 +103,15 @@ For one-command installation from any Windows machine with internet access, exec
 
 **Bay Management:**
 ```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat | cmd /c - bay-management YOUR_GITHUB_TOKEN
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat > temp-install.bat && temp-install.bat bay-management YOUR_GITHUB_TOKEN && del temp-install.bat
 ```
 
 **TPS:**
 ```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat | cmd /c - tps
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat > temp-install.bat && temp-install.bat tps && del temp-install.bat
 ```
 
-These commands download and execute the universal installer which handles all the heavy lifting!
+These commands download the universal installer, execute it with your parameters, and clean up automatically!
 
 ---
 
