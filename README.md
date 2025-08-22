@@ -88,186 +88,73 @@ A single batch file that can install either Bay Management or TPS applications b
 ```batch
 # Local usage
 install.bat bay-management YOUR_GITHUB_TOKEN
-install.bat tps
+install.bat tps  
+install.bat both YOUR_GITHUB_TOKEN
 
-# Remote usage (recommended)
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat | cmd /c - bay-management YOUR_TOKEN
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat | cmd /c - tps
+# Remote usage (see One-Command Installation section above)
 ```
 
-## 🌐 Remote Execution
+## 🚀 One-Command Installation
 
-For one-command installation from any Windows machine with internet access, execute the scripts directly without downloading files:
+Install PARennial Golf applications with a single command from any Windows machine with internet access.
 
-## 🔥 **Recommended: Universal One-Liner**
+### 🎯 **Quick Commands**
 
-**Bay Management:**
+**Install Bay Management Only:**
 ```batch
 curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat > temp-install.bat && temp-install.bat bay-management YOUR_GITHUB_TOKEN && del temp-install.bat
 ```
 
-**TPS:**
+**Install TPS Only:**
 ```batch
 curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat > temp-install.bat && temp-install.bat tps && del temp-install.bat
 ```
 
-These commands download the universal installer, execute it with your parameters, and clean up automatically!
-
----
-
-## 📥 **Alternative Methods**
-
-If you prefer downloading first or need more control:
-
+**Install Both Applications (Bay Management → TPS):**
 ```batch
-# Download and run the remote installer
-curl -L -o remote-install.bat https://raw.githubusercontent.com/parennialgolf/installers/main/remote-install.bat
-
-# Install Bay Management
-remote-install.bat bay-management YOUR_GITHUB_TOKEN
-
-# Install Bay Management with custom arguments
-remote-install.bat bay-management YOUR_GITHUB_TOKEN --silent
-remote-install.bat bay-management YOUR_GITHUB_TOKEN -AssetType portable
-
-# Install TPS (no token needed)
-remote-install.bat tps
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat > temp-install.bat && temp-install.bat both YOUR_GITHUB_TOKEN && del temp-install.bat
 ```
 
-### Method 1: Download and Execute Remote Installer
+### 📋 **How to Use**
 
-```batch
-# Download the remote installer
-curl -L -o remote-install.bat https://raw.githubusercontent.com/parennialgolf/installers/main/remote-install.bat
+1. **Replace `YOUR_GITHUB_TOKEN`** with your actual GitHub Personal Access Token
+2. **Copy and paste** the entire command into Windows Command Prompt
+3. **Press Enter** and the installer will:
+   - Download the universal installer
+   - Execute the installation(s)
+   - Clean up temporary files automatically
 
-# Install Bay Management
-remote-install.bat bay-management YOUR_GITHUB_TOKEN
+### ⚡ **What Each Command Does**
 
-# Install TPS (no token needed)
-remote-install.bat tps
-```
+- **Bay Management**: Downloads and installs the latest Bay Management application
+- **TPS**: Downloads and installs TrackMan Performance Studio
+- **Both**: Installs Bay Management first, then TPS (requires only one GitHub token)
 
-### Method 2: Direct Script Execution
+### 🔧 **Requirements**
 
-**Bay Management:**
-```batch
-# Download and run directly
-curl -L -o bay-management.ps1 https://raw.githubusercontent.com/parennialgolf/installers/main/bay-management.ps1
-powershell.exe -ExecutionPolicy Bypass -File bay-management.ps1 -Token "YOUR_GITHUB_TOKEN"
-```
+- Windows operating system with Command Prompt
+- `curl` command-line tool (pre-installed on Windows 10/11)
+- GitHub Personal Access Token (for Bay Management)
+- Internet connection
 
-**TPS:**
-```batch
-# Download and run directly
-curl -L -o tps.bat https://raw.githubusercontent.com/parennialgolf/installers/main/tps.bat
-tps.bat
-```
+### 🔑 **Creating a GitHub Personal Access Token**
 
-### Method 3: Direct Execution (No File Downloads)
-
-**Bay Management:**
-```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/bay-management.ps1 | powershell.exe -ExecutionPolicy Bypass -Command "& ([ScriptBlock]::Create((Get-Content -Path STDIN -Raw))) -Token 'YOUR_GITHUB_TOKEN'"
-```
-
-**TPS:**
-```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/tps.bat | cmd
-```
-
-### Method 4: PowerShell Direct Execution
-
-**Bay Management:**
-```powershell
-$script = (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/parennialgolf/installers/main/bay-management.ps1' -UseBasicParsing).Content
-$scriptBlock = [ScriptBlock]::Create($script)
-& $scriptBlock -Token 'YOUR_GITHUB_TOKEN'
-```
-
-**TPS (via PowerShell):**
-```powershell
-$script = (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/parennialgolf/installers/main/tps.bat' -UseBasicParsing).Content
-$scriptFile = [System.IO.Path]::GetTempFileName() + '.bat'
-Set-Content -Path $scriptFile -Value $script
-& $scriptFile
-Remove-Item $scriptFile
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-1. **For Bay Management (`bay-management.ps1`)**:
-   - PowerShell 5.0 or later
-   - GitHub Personal Access Token with repository read access
-   - Internet connection
-
-2. **For TPS (`tps.bat`)**:
-   - Windows operating system
-   - curl command-line tool
-   - Internet connection
-
-### Creating a GitHub Personal Access Token
-
-To use the Bay Management installer, you'll need a GitHub PAT:
-
-1. Go to GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
-2. Click "Generate new token (classic)"
+1. Go to **GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)**
+2. Click **"Generate new token (classic)"**
 3. Give it a descriptive name
-4. Select the `repo` scope for private repositories or `public_repo` for public repositories
-5. Click "Generate token"
-6. Copy the token and use it with the `-Token` parameter
+4. Select the **`repo`** scope (for private repositories) or **`public_repo`** (for public repositories)
+5. Click **"Generate token"**
+6. **Copy the token** and use it in the commands above
 
-## 🛠️ Technical Details
+## 📞 **Support**
 
-### Bay Management Script Architecture
+If you encounter issues:
 
-The PowerShell script follows a structured approach:
+1. **GitHub Token Error**: Verify your PAT has `repo` or `public_repo` permissions
+2. **Download Failures**: Check your internet connection and firewall settings
+3. **Installation Errors**: Try running Command Prompt as administrator
+4. **curl Not Found**: Install curl from https://curl.se/windows/ (usually pre-installed on Windows 10/11)
 
-1. **Validation Phase**: Checks if software is already installed
-2. **API Integration**: Authenticates with GitHub API using PAT
-3. **Release Selection**: Finds the latest stable or pre-release version
-4. **Asset Resolution**: Selects appropriate installer type (setup/portable)
-5. **Secure Download**: Handles GitHub's signed URL redirects
-6. **Installation**: Executes installer with optional custom arguments
-
-### Error Handling
-
-Both scripts include comprehensive error handling:
-- Network connectivity issues
-- Authentication failures
-- File download errors
-- Installation process failures
-- Missing dependencies
-
-## 📄 Logs and Troubleshooting
-
-### Bay Management
-- Outputs detailed progress information to console
-- Error messages include specific failure points
-- SHA256 hash verification for downloaded files
-
-### TPS Installation
-- Creates log file: `%USERPROFILE%\Downloads\install_tps.log`
-- Timestamps all operations
-- Records download and installation status
-
-## 🔒 Security Notes
-
-- GitHub PAT should be kept secure and not shared
-- Scripts verify file integrity using SHA256 hashing
-- All downloads use HTTPS/TLS 1.2 encryption
-- No sensitive information is logged in plain text
-
-## 📞 Support
-
-For issues with these installers, please check the log files first. Common solutions:
-
-1. **GitHub API Issues**: Verify your PAT has correct permissions
-2. **Download Failures**: Check internet connection and firewall settings
-3. **Installation Errors**: Run as administrator if needed
-4. **curl Not Found**: Install curl from https://curl.se/windows/
-
-## 📝 License
+## 📝 **License**
 
 These installer scripts are provided as-is for PARennial Golf software deployment.
