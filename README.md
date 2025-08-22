@@ -71,32 +71,47 @@ tps.bat
 - **Installation Path**: `C:\Program Files\TrackMan Performance Studio\`
 - **Log File**: `%USERPROFILE%\Downloads\install_tps.log`
 
-### 3. `remote-install.bat` - Remote Batch Installer
+### 3. `install.bat` - Universal Installer (⭐ Recommended)
 
-A Windows batch script that downloads and executes installer scripts directly from the GitHub repository.
+A single batch file that can install either Bay Management or TPS applications by downloading and executing the appropriate installer scripts.
 
 **Features:**
-- 🌐 **Remote Execution**: Downloads and runs scripts directly from GitHub
-- 🔄 **Multi-Script Support**: Can execute either Bay Management or TPS installers
+- 🎯 **Single Entry Point**: One script handles both applications  
+- 🌐 **Remote Ready**: Designed for curl-based execution
+- 🔍 **Smart Detection**: Checks if software is already installed
+- 📥 **Auto-Download**: Fetches the appropriate installer script as needed
 - 📝 **Comprehensive Logging**: Detailed logging with timestamps
-- 🧹 **Automatic Cleanup**: Removes temporary files after execution
-- 🛡️ **Error Handling**: Robust error checking and validation
+- 🧹 **Auto-Cleanup**: Removes temporary files after execution
+- 🛡️ **Error Handling**: Robust validation and error reporting
+
+**Usage:**
+```batch
+# Local usage
+install.bat bay-management YOUR_GITHUB_TOKEN
+install.bat tps
+
+# Remote usage (recommended)
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat | cmd /c - bay-management YOUR_TOKEN
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat | cmd /c - tps
+```
 
 ## 🌐 Remote Execution
 
 For one-command installation from any Windows machine with internet access, execute the scripts directly without downloading files:
 
-## 🔥 **Recommended: Zero-Download Methods**
+## 🔥 **Recommended: Universal One-Liner**
 
-**Bay Management (Best):**
-```powershell
-$script = (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/parennialgolf/installers/main/bay-management.ps1' -UseBasicParsing).Content; & ([ScriptBlock]::Create($script)) -Token 'YOUR_GITHUB_TOKEN'
-```
-
-**TPS (Best):**
+**Bay Management:**
 ```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/tps.bat | cmd
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat | cmd /c - bay-management YOUR_GITHUB_TOKEN
 ```
+
+**TPS:**
+```batch
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat | cmd /c - tps
+```
+
+These commands download and execute the universal installer which handles all the heavy lifting!
 
 ---
 
