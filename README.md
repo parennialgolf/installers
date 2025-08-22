@@ -126,31 +126,37 @@ curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.
 
 ### ⚡ **What Each Command Does**
 
-- **Bay Management**: Downloads and installs the latest Bay Management application
-- **TPS**: Downloads and installs TrackMan Performance Studio
-- **Both**: Installs Bay Management first, then TPS (requires only one GitHub token)
+- **Bay Management**: Downloads and installs the latest Bay Management application (requires PARennial Golf GitHub access)
+- **TPS**: Downloads and installs TrackMan Performance Studio (no special access required - anyone can use)
+- **Both**: Installs Bay Management first, then TPS (requires PARennial Golf GitHub access for Bay Management portion)
 
 ### 🔧 **Requirements**
 
 - Windows operating system with Command Prompt
 - `curl` command-line tool (pre-installed on Windows 10/11)
-- GitHub Personal Access Token (for Bay Management)
+- **PARennial Golf GitHub Personal Access Token** (for Bay Management only)
 - Internet connection
 
-### 🔑 **Creating a GitHub Personal Access Token**
+**Note**: Bay Management requires a GitHub token with access to the PARennial Golf organization. TPS installation works for anyone without special permissions.
+
+### 🔑 **Creating a PARennial Golf GitHub Personal Access Token**
+
+**Requirements**: You must have access to the PARennial Golf GitHub organization.
 
 1. Go to **GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)**
 2. Click **"Generate new token (classic)"**
-3. Give it a descriptive name
-4. Select the **`repo`** scope (for private repositories) or **`public_repo`** (for public repositories)
+3. Give it a descriptive name (e.g., "PARennial Golf Installer")
+4. Select the **`repo`** scope to access private repositories
 5. Click **"Generate token"**
-6. **Copy the token** and use it in the commands above
+6. **Copy the token** and use it in the Bay Management commands above
+
+**Note**: If you don't have access to PARennial Golf repositories, contact your administrator for access or use only the TPS installer.
 
 ## 📞 **Support**
 
 If you encounter issues:
 
-1. **GitHub Token Error**: Verify your PAT has `repo` or `public_repo` permissions
+1. **GitHub Token Error**: Verify your PAT has `repo` permissions and access to PARennial Golf organization
 2. **Download Failures**: Check your internet connection and firewall settings
 3. **Installation Errors**: Try running Command Prompt as administrator
 4. **curl Not Found**: Install curl from https://curl.se/windows/ (usually pre-installed on Windows 10/11)
