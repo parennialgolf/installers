@@ -50,8 +50,13 @@ if not exist "%TEMP_DIR%" mkdir "%TEMP_DIR%"
 :: Log function (writes to both console and file)
 goto :skip_log_func
 :log
-echo [%DATE% %TIME%] %~1 >> "%LOG_FILE%"
-echo %~1
+if "%~1"=="" (
+    echo.>> "%LOG_FILE%"
+    echo.
+) else (
+    echo [%DATE% %TIME%] %~1 >> "%LOG_FILE%"
+    echo %~1
+)
 exit /b 0
 :skip_log_func
 
@@ -99,7 +104,7 @@ if exist "%BAY_EXE%" (
 
 call :log "Downloading Bay Management installer script..."
 set "SCRIPT_FILE=%TEMP_DIR%\bay-management.ps1"
-curl -L -s -o "%SCRIPT_FILE%" "%REPO_URL%/bay-management.ps1"
+curl -f -L -s --retry 3 --retry-delay 2 -o "%SCRIPT_FILE%" "%REPO_URL%/bay-management.ps1"
 if %ERRORLEVEL% neq 0 (
     call :log "ERROR: Failed to download bay-management.ps1"
     exit /b 1
@@ -108,7 +113,7 @@ if %ERRORLEVEL% neq 0 (
 call :log "Script downloaded successfully."
 call :log "Executing Bay Management installer..."
 
-powershell.exe -ExecutionPolicy Bypass -File "%SCRIPT_FILE%" -Token "%GITHUB_TOKEN%"
+powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "%SCRIPT_FILE%" -Token "%GITHUB_TOKEN%"
 set "EXIT_CODE=%ERRORLEVEL%"
 
 if %EXIT_CODE% equ 0 (
@@ -132,7 +137,7 @@ if exist "%TPS_EXE%" (
 
 call :log "Downloading TPS installer script..."
 set "SCRIPT_FILE=%TEMP_DIR%\tps.bat"
-curl -L -s -o "%SCRIPT_FILE%" "%REPO_URL%/tps.bat"
+curl -f -L -s --retry 3 --retry-delay 2 -o "%SCRIPT_FILE%" "%REPO_URL%/tps.bat"
 if %ERRORLEVEL% neq 0 (
     call :log "ERROR: Failed to download tps.bat"
     exit /b 1
@@ -171,14 +176,14 @@ if exist "%BAY_EXE%" (
 ) else (
     call :log "Downloading Bay Management installer script..."
     set "BAY_SCRIPT_FILE=%TEMP_DIR%\bay-management.ps1"
-    curl -L -s -o "!BAY_SCRIPT_FILE!" "%REPO_URL%/bay-management.ps1"
+    curl -f -L -s --retry 3 --retry-delay 2 -o "!BAY_SCRIPT_FILE!" "%REPO_URL%/bay-management.ps1"
     if !ERRORLEVEL! neq 0 (
         call :log "ERROR: Failed to download bay-management.ps1"
         exit /b 1
     )
 
     call :log "Executing Bay Management installer..."
-    powershell.exe -ExecutionPolicy Bypass -File "!BAY_SCRIPT_FILE!" -Token "%GITHUB_TOKEN%"
+    powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "!BAY_SCRIPT_FILE!" -Token "%GITHUB_TOKEN%"
     set "BAY_EXIT_CODE=!ERRORLEVEL!"
 
     if !BAY_EXIT_CODE! equ 0 (
@@ -200,7 +205,7 @@ if exist "%TPS_EXE%" (
 ) else (
     call :log "Downloading TPS installer script..."
     set "TPS_SCRIPT_FILE=%TEMP_DIR%\tps.bat"
-    curl -L -s -o "!TPS_SCRIPT_FILE!" "%REPO_URL%/tps.bat"
+    curl -f -L -s --retry 3 --retry-delay 2 -o "!TPS_SCRIPT_FILE!" "%REPO_URL%/tps.bat"
     if !ERRORLEVEL! neq 0 (
         call :log "ERROR: Failed to download tps.bat"
         exit /b 1

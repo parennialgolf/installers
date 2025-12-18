@@ -143,12 +143,23 @@ curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.
 
 **Requirements**: You must have access to the PARennial Golf GitHub organization.
 
+You can use either **fine-grained** tokens (`github_pat_...`) or **classic** tokens (`ghp_...`).
+
+**Fine-grained (recommended):**
+1. Go to **GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens**
+2. Create a token with **Repository access** including the Bay Management repo (default in script: `parennialgolf/dotnet`)
+3. Set **Permissions** to at least **Contents: Read**
+4. If your org uses SAML SSO, **Authorize SSO** for the token
+
+**Classic (works):**
 1. Go to **GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)**
 2. Click **"Generate new token (classic)"**
 3. Give it a descriptive name (e.g., "PARennial Golf Installer")
 4. Select the **`repo`** scope to access private repositories
-5. Click **"Generate token"**
+5. If your org uses SAML SSO, **Authorize SSO**
 6. **Copy the token** and use it in the Bay Management commands above
+
+⚠️ **Security note**: Don’t paste tokens into chat/tickets. Prefer setting an environment variable and referencing it from the command line.
 
 **Note**: If you don't have access to PARennial Golf repositories, contact your administrator for access or use only the TPS installer.
 

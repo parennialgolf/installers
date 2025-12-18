@@ -1,6 +1,6 @@
 param(
   [Parameter(Mandatory = $true)]
-  [string]$Token,                              # GitHub classic PAT
+  [string]$Token,                              # GitHub classic or fine-grained PAT
 
   [string]$Owner = 'parennialgolf',
   [string]$Repo  = 'dotnet',
@@ -46,9 +46,11 @@ if (Test-Path $ExePath) {
 $RepoApi = "https://api.github.com/repos/$Owner/$Repo"
 
 $Headers = @{
-  Authorization = "token $Token"   # ✅ REQUIRED for classic PATs
+  # Use Bearer for maximum compatibility (fine-grained PATs require it; classic PATs also work).
+  Authorization          = "Bearer $Token"
   'User-Agent'  = 'pg-installer'
   Accept        = 'application/vnd.github+json'
+  'X-GitHub-Api-Version' = '2022-11-28'
 }
 
 # -------------------------
@@ -59,16 +61,41 @@ try {
     Invoke-RestMethod -Headers $Headers -Uri $RepoApi -Method Get | Out-Null
 }
 catch {
+    $status = $null
+    try { $status = $_.Exception.Response.StatusCode.value__ } catch { }
+
+    $extra =
+      if ($status -eq 404) {
+@"
+GitHub returned 404 for the repo API.
+This usually means one of:
+- The repository name is wrong (repo does not exist), OR
+- The repo is private and your token is missing access (GitHub often returns 404 for unauthorized private repos).
+
+For fine-grained tokens (`github_pat_...`), ensure:
+- Repository access includes `$Owner/$Repo`
+- Permissions include at least "Contents: Read"
+- If the org uses SAML SSO, the token is authorized for SSO
+"@
+      }
+      elseif ($status -eq 401 -or $status -eq 403) {
+@"
+GitHub returned $status (unauthorized/forbidden).
+Ensure:
+- Token is valid (not expired/revoked)
+- Token has access to `$Owner/$Repo`
+- If the org uses SAML SSO, the token is authorized for SSO
+"@
+      }
+      else {
+        "GitHub error status: $status"
+      }
+
     throw @"
-Cannot access repository $Owner/$Repo.
+Cannot access repository $Owner/$Repo
+URL: $RepoApi
 
-Causes:
-- Token is not classic
-- Token not SSO-authorized for the org
-- Token missing 'repo' scope
-
-Fix:
-GitHub → Settings → Developer Settings → Tokens → Authorize SSO
+$extra
 "@
 }
 
@@ -151,7 +178,7 @@ $Handler.AllowAutoRedirect = $false
 $Client = New-Object System.Net.Http.HttpClient($Handler)
 $Client.DefaultRequestHeaders.UserAgent.ParseAdd('pg-installer')
 $Client.DefaultRequestHeaders.Authorization =
-    New-Object System.Net.Http.Headers.AuthenticationHeaderValue('token', $Token)
+    New-Object System.Net.Http.Headers.AuthenticationHeaderValue('Bearer', $Token)
 
 $Client.DefaultRequestHeaders.Accept.Clear()
 $Client.DefaultRequestHeaders.Accept.Add(
