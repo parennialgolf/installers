@@ -102,17 +102,17 @@ Install PARennial Golf applications with a single command from any Windows machi
 
 **Install Bay Management Only:**
 ```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat > temp-install.bat && temp-install.bat bay-management YOUR_GITHUB_TOKEN && del temp-install.bat
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/install.bat > temp-install.bat && temp-install.bat bay-management YOUR_GITHUB_TOKEN && del temp-install.bat
 ```
 
 **Install TPS Only:**
 ```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat > temp-install.bat && temp-install.bat tps && del temp-install.bat
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/install.bat > temp-install.bat && temp-install.bat tps && del temp-install.bat
 ```
 
 **Install Both Applications (Bay Management → TPS):**
 ```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat > temp-install.bat && temp-install.bat both YOUR_GITHUB_TOKEN && del temp-install.bat
+curl -s https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/install.bat > temp-install.bat && temp-install.bat both YOUR_GITHUB_TOKEN && del temp-install.bat
 ```
 
 ### 📋 **How to Use**

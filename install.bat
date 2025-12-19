@@ -23,9 +23,9 @@ if "%~1"=="" (
         echo   install.bat both ghp_xxxxxxxxxxxx
         echo.
         echo Remote usage:
-        echo   curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat ^> temp-install.bat ^&^& temp-install.bat bay-management YOUR_TOKEN ^&^& del temp-install.bat
-        echo   curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat ^> temp-install.bat ^&^& temp-install.bat tps ^&^& del temp-install.bat
-        echo   curl -s https://raw.githubusercontent.com/parennialgolf/installers/main/install.bat ^> temp-install.bat ^&^& temp-install.bat both YOUR_TOKEN ^&^& del temp-install.bat
+        echo   curl -s https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/install.bat ^> temp-install.bat ^&^& temp-install.bat bay-management YOUR_TOKEN ^&^& del temp-install.bat
+        echo   curl -s https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/install.bat ^> temp-install.bat ^&^& temp-install.bat tps ^&^& del temp-install.bat
+        echo   curl -s https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/install.bat ^> temp-install.bat ^&^& temp-install.bat both YOUR_TOKEN ^&^& del temp-install.bat
         echo.
         exit /b 1
     ) else (
@@ -40,7 +40,8 @@ if "%~1"=="" (
 )
 
 :start_install
-set "REPO_URL=https://raw.githubusercontent.com/parennialgolf/installers/main"
+REM NOTE: Use refs/heads/main to avoid ambiguity if a tag named "main" exists.
+set "REPO_URL=https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main"
 set "TEMP_DIR=%TEMP%\pg-installer"
 set "LOG_FILE=%TEMP_DIR%\install.log"
 

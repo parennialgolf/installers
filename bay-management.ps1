@@ -48,8 +48,8 @@ $RepoApi = "https://api.github.com/repos/$Owner/$Repo"
 $Headers = @{
   # Use Bearer for maximum compatibility (fine-grained PATs require it; classic PATs also work).
   Authorization          = "Bearer $Token"
-  'User-Agent'  = 'pg-installer'
-  Accept        = 'application/vnd.github+json'
+  'User-Agent'           = 'pg-installer'
+  Accept                 = 'application/vnd.github+json'
   'X-GitHub-Api-Version' = '2022-11-28'
 }
 
@@ -126,7 +126,7 @@ $Release = $Releases |
     } -Descending |
     Select-Object -First 1
 
-Write-Host "    Selected release: $($Release.tag_name) — $($Release.name)"
+Write-Host "    Selected release: $($Release.tag_name) - $($Release.name)"
 Write-Host ""
 
 # -------------------------
