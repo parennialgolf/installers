@@ -4,7 +4,7 @@ This repository contains automated installation scripts for PARennial Golf appli
 
 ## 📋 Scripts Overview
 
-### 1. `bay-management.ps1` - Bay Management PowerShell Installer
+### `bay-management.ps1` - Bay Management PowerShell Installer
 
 A comprehensive PowerShell script that automatically downloads and installs the latest Bay Management application from GitHub releases.
 
@@ -43,76 +43,15 @@ A comprehensive PowerShell script that automatically downloads and installs the 
 - Default: `%LOCALAPPDATA%\PARennialGolf.BayManagement.UI.V2\current\`
 - Portable: `%ProgramFiles%\PARennialGolf\BayManagement\`
 
-### 2. `tps.bat` - TrackMan Performance Studio Batch Installer
-
-A Windows batch script that downloads and installs TrackMan Performance Studio software.
-
-**Features:**
-- 🔍 **Pre-installation Check**: Verifies if TPS is already installed
-- 📥 **Direct Download**: Downloads installer from TrackMan's official release URL
-- 📝 **Activity Logging**: Creates detailed log files for troubleshooting
-- ⚡ **Dependency Validation**: Checks for required tools (curl)
-- 🎮 **Interactive Installation**: Runs installer in interactive mode for user control
-
-**Usage:**
-```batch
-# Run the installer
-tps.bat
-```
-
-**Requirements:**
-- Windows operating system
-- `curl` command-line tool (checks automatically)
-- Internet connection
-
-**Installation Details:**
-- **Download URL**: https://link.trackman.dk/tpsrelease
-- **Download Location**: `%USERPROFILE%\Downloads\TrackManPerformanceStudioSetup.exe`
-- **Installation Path**: `C:\Program Files\TrackMan Performance Studio\`
-- **Log File**: `%USERPROFILE%\Downloads\install_tps.log`
-
-### 3. `install.bat` - Universal Installer (⭐ Recommended)
-
-A single batch file that can install either Bay Management or TPS applications by downloading and executing the appropriate installer scripts.
-
-**Features:**
-- 🎯 **Single Entry Point**: One script handles both applications  
-- 🌐 **Remote Ready**: Designed for curl-based execution
-- 🔍 **Smart Detection**: Checks if software is already installed
-- 📥 **Auto-Download**: Fetches the appropriate installer script as needed
-- 📝 **Comprehensive Logging**: Detailed logging with timestamps
-- 🧹 **Auto-Cleanup**: Removes temporary files after execution
-- 🛡️ **Error Handling**: Robust validation and error reporting
-
-**Usage:**
-```batch
-# Local usage
-install.bat bay-management YOUR_GITHUB_TOKEN
-install.bat tps  
-install.bat both YOUR_GITHUB_TOKEN
-
-# Remote usage (see One-Command Installation section above)
-```
-
 ## 🚀 One-Command Installation
 
-Install PARennial Golf applications with a single command from any Windows machine with internet access.
+Install Bay Management with a single command from any Windows machine with internet access.
 
-### 🎯 **Quick Commands**
+### 🎯 **Quick Command (CMD)**
 
-**Install Bay Management Only:**
 ```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/install.bat > temp-install.bat && temp-install.bat bay-management YOUR_GITHUB_TOKEN && del temp-install.bat
-```
-
-**Install TPS Only:**
-```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/install.bat > temp-install.bat && temp-install.bat tps && del temp-install.bat
-```
-
-**Install Both Applications (Bay Management → TPS):**
-```batch
-curl -s https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/install.bat > temp-install.bat && temp-install.bat both YOUR_GITHUB_TOKEN && del temp-install.bat
+set "PG_TOKEN=YOUR_GITHUB_TOKEN"
+curl -fL -o bay-management.ps1 https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/bay-management.ps1 && powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File bay-management.ps1 -Token "%PG_TOKEN%"
 ```
 
 ### 📋 **How to Use**
@@ -120,15 +59,12 @@ curl -s https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/ma
 1. **Replace `YOUR_GITHUB_TOKEN`** with your actual GitHub Personal Access Token
 2. **Copy and paste** the entire command into Windows Command Prompt
 3. **Press Enter** and the installer will:
-   - Download the universal installer
-   - Execute the installation(s)
-   - Clean up temporary files automatically
+   - Download the Bay Management installer script
+   - Install the latest Bay Management release
 
 ### ⚡ **What Each Command Does**
 
 - **Bay Management**: Downloads and installs the latest Bay Management application (requires PARennial Golf GitHub access)
-- **TPS**: Downloads and installs TrackMan Performance Studio (no special access required - anyone can use)
-- **Both**: Installs Bay Management first, then TPS (requires PARennial Golf GitHub access for Bay Management portion)
 
 ### 🔧 **Requirements**
 

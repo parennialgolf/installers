@@ -64,39 +64,36 @@ catch {
     $status = $null
     try { $status = $_.Exception.Response.StatusCode.value__ } catch { }
 
-    $extra =
+    $extraLines =
       if ($status -eq 404) {
-@"
-GitHub returned 404 for the repo API.
-This usually means one of:
-- The repository name is wrong (repo does not exist), OR
-- The repo is private and your token is missing access (GitHub often returns 404 for unauthorized private repos).
-
-For fine-grained tokens (`github_pat_...`), ensure:
-- Repository access includes `$Owner/$Repo`
-- Permissions include at least "Contents: Read"
-- If the org uses SAML SSO, the token is authorized for SSO
-"@
+        @(
+          'GitHub returned 404 for the repo API.'
+          'This usually means one of:'
+          '- The repository name is wrong (repo does not exist), OR'
+          '- The repo is private and your token is missing access (GitHub often returns 404 for unauthorized private repos).'
+          ''
+          'For fine-grained tokens (github_pat_...), ensure:'
+          "- Repository access includes $Owner/$Repo"
+          '- Permissions include at least Contents: Read'
+          '- If the org uses SAML SSO, the token is authorized for SSO'
+        )
       }
       elseif ($status -eq 401 -or $status -eq 403) {
-@"
-GitHub returned $status (unauthorized/forbidden).
-Ensure:
-- Token is valid (not expired/revoked)
-- Token has access to `$Owner/$Repo`
-- If the org uses SAML SSO, the token is authorized for SSO
-"@
+        @(
+          "GitHub returned $status (unauthorized/forbidden)."
+          'Ensure:'
+          '- Token is valid (not expired/revoked)'
+          "- Token has access to $Owner/$Repo"
+          '- If the org uses SAML SSO, the token is authorized for SSO'
+        )
       }
       else {
-        "GitHub error status: $status"
+        @("GitHub error status: $status")
       }
 
-    throw @"
-Cannot access repository $Owner/$Repo
-URL: $RepoApi
+    $extra = $extraLines -join "`r`n"
 
-$extra
-"@
+    throw ("Cannot access repository {0}/{1}`r`nURL: {2}`r`n`r`n{3}" -f $Owner, $Repo, $RepoApi, $extra)
 }
 
 # -------------------------
