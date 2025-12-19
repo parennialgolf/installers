@@ -91,7 +91,6 @@ catch {
       }
 
     $extra = $extraLines -join [Environment]::NewLine
-
     $nl = [Environment]::NewLine
     throw ("Cannot access repository {0}/{1}{4}URL: {2}{4}{4}{3}" -f $Owner, $Repo, $RepoApi, $extra, $nl)
 }
@@ -241,3 +240,4 @@ else {
 
 Write-Host ''
 Write-Host '=== Install Finished Successfully ==='
+

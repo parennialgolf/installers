@@ -4,7 +4,7 @@ Run this from **Windows Command Prompt** to install the latest Bay Management re
 
 ```bat
 set "PG_TOKEN=YOUR_GITHUB_TOKEN"
-curl -fL -o bay-management.ps1 https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/bay-management.ps1 && powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File bay-management.ps1 -Token "%PG_TOKEN%"
+curl -fL -o install.ps1 https://raw.githubusercontent.com/parennialgolf/installers/refs/heads/main/install.ps1 && powershell.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File install.ps1 -Token "%PG_TOKEN%"
 ```
 
 Token requirements:
