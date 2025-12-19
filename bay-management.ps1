@@ -25,7 +25,7 @@ Write-Host "Owner:    $Owner"
 Write-Host "Repo:     $Repo"
 Write-Host "Type:     $AssetType"
 Write-Host "Prerelease included: $IncludePrerelease"
-Write-Host ""
+Write-Host "" 
 
 # -------------------------
 # 0) Already installed?
