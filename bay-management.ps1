@@ -20,23 +20,22 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference    = 'SilentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-Write-Host "=== Bay Management Installer ==="
-Write-Host "Owner:    $Owner"
-Write-Host "Repo:     $Repo"
-Write-Host "Type:     $AssetType"
-Write-Host "Prerelease included: $IncludePrerelease"
-Write-Host "" 
+Write-Host '=== Bay Management Installer ==='
+Write-Host ('Owner:    {0}' -f $Owner)
+Write-Host ('Repo:     {0}' -f $Repo)
+Write-Host ('Type:     {0}' -f $AssetType)
+Write-Host ('Prerelease included: {0}' -f $IncludePrerelease)
+Write-Host ''
 
 # -------------------------
 # 0) Already installed?
 # -------------------------
-$ExePath = Join-Path $env:LOCALAPPDATA `
-  'PARennialGolf.BayManagement.UI.V2\current\PARennialGolf.BayManagement.UI.V2.exe'
+$ExePath = Join-Path $env:LOCALAPPDATA 'PARennialGolf.BayManagement.UI.V2\current\PARennialGolf.BayManagement.UI.V2.exe'
 
 if (Test-Path $ExePath) {
-    Write-Host ">>> Bay Management already installed:"
-    Write-Host ">>> $ExePath"
-    Write-Host ">>> Skipping install."
+    Write-Host '>>> Bay Management already installed:'
+    Write-Host ('>>> {0}' -f $ExePath)
+    Write-Host '>>> Skipping install.'
     exit 0
 }
 
@@ -91,9 +90,10 @@ catch {
         @("GitHub error status: $status")
       }
 
-    $extra = $extraLines -join "`r`n"
+    $extra = $extraLines -join [Environment]::NewLine
 
-    throw ("Cannot access repository {0}/{1}`r`nURL: {2}`r`n`r`n{3}" -f $Owner, $Repo, $RepoApi, $extra)
+    $nl = [Environment]::NewLine
+    throw ("Cannot access repository {0}/{1}{4}URL: {2}{4}{4}{3}" -f $Owner, $Repo, $RepoApi, $extra, $nl)
 }
 
 # -------------------------
@@ -101,7 +101,7 @@ catch {
 # -------------------------
 Write-Host "[1] Fetching releases..."
 $ReleasesUrl = "$RepoApi/releases?per_page=30"
-Write-Host "    URL: $ReleasesUrl"
+Write-Host ('    URL: {0}' -f $ReleasesUrl)
 
 $Releases = Invoke-RestMethod -Headers $Headers -Uri $ReleasesUrl
 
@@ -123,8 +123,8 @@ $Release = $Releases |
     } -Descending |
     Select-Object -First 1
 
-Write-Host "    Selected release: $($Release.tag_name) - $($Release.name)"
-Write-Host ""
+Write-Host ('    Selected release: {0} - {1}' -f $Release.tag_name, $Release.name)
+Write-Host ''
 
 # -------------------------
 # 2) Choose asset
@@ -159,8 +159,8 @@ if (-not $Asset) {
     throw "No suitable asset found. Available assets: $names"
 }
 
-Write-Host "    Asset chosen: $($Asset.name)"
-Write-Host ""
+Write-Host ('    Asset chosen: {0}' -f $Asset.name)
+Write-Host ''
 
 # -------------------------
 # 3) Resolve signed download URL
@@ -191,8 +191,8 @@ if (-not $Response.Headers.Location) {
 }
 
 $DownloadUrl = $Response.Headers.Location.AbsoluteUri
-Write-Host "    Download URL resolved."
-Write-Host ""
+Write-Host '    Download URL resolved.'
+Write-Host ''
 
 # -------------------------
 # 4) Download
@@ -200,16 +200,12 @@ Write-Host ""
 Write-Host "[4] Downloading asset..."
 $OutFile = Join-Path $env:TEMP $Asset.name
 
-Invoke-WebRequest `
-  -Uri $DownloadUrl `
-  -OutFile $OutFile `
-  -MaximumRedirection 5 `
-  -TimeoutSec 600
+Invoke-WebRequest -Uri $DownloadUrl -OutFile $OutFile -MaximumRedirection 5 -TimeoutSec 600
 
 $Hash = (Get-FileHash -Algorithm SHA256 -Path $OutFile).Hash
-Write-Host "    Saved to: $OutFile"
-Write-Host "    SHA256: $Hash"
-Write-Host ""
+Write-Host ('    Saved to: {0}' -f $OutFile)
+Write-Host ('    SHA256: {0}' -f $Hash)
+Write-Host ''
 
 # -------------------------
 # 5) Install
@@ -219,11 +215,11 @@ Write-Host "[5] Installing..."
 if ($AssetType -eq 'setup') {
 
     if ([string]::IsNullOrWhiteSpace($InstallArgs)) {
-        Write-Host "    Launching installer interactively..."
+        Write-Host '    Launching installer interactively...'
         $p = Start-Process -FilePath $OutFile -Wait -PassThru
     }
     else {
-        Write-Host "    Launching installer with args: $InstallArgs"
+        Write-Host ('    Launching installer with args: {0}' -f $InstallArgs)
         $p = Start-Process -FilePath $OutFile -ArgumentList $InstallArgs -Wait -PassThru
     }
 
@@ -231,17 +227,17 @@ if ($AssetType -eq 'setup') {
         throw "Installer exited with code $($p.ExitCode)"
     }
 
-    Write-Host "    Installation completed successfully."
+    Write-Host '    Installation completed successfully.'
 }
 else {
     $Target = Join-Path $env:ProgramFiles 'PARennialGolf\BayManagement'
-    Write-Host "    Extracting to $Target..."
+    Write-Host ('    Extracting to {0}...' -f $Target)
 
     New-Item -ItemType Directory -Force -Path $Target | Out-Null
     Expand-Archive -Path $OutFile -DestinationPath $Target -Force
 
-    Write-Host "    Portable version extracted."
+    Write-Host '    Portable version extracted.'
 }
 
-Write-Host ""
-Write-Host "=== Install Finished Successfully ==="
+Write-Host ''
+Write-Host '=== Install Finished Successfully ==='
